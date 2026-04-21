@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Joyce - Amanjiwo Resort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+       
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
+        body { background-color: #f4f4f4; color: #333; scroll-behavior: smooth; }
+        
+        /* Warna Utama Amanjiwo */
+        :root { --emas: #d4af37; --gelap: #1a1a1a; --putih: #ffffff; }
+
+        h1, h2, h3 { color: var(--emas); font-weight: normal; margin-bottom: 15px; }
+
+        /* =========================================
+           1. LAYAR LOGIN (OVERLAY)
+           ========================================= */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); color: var(--emas);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: 0.5s;
+        }
+        .login-box {
+            text-align: center; border: 2px solid var(--emas);
+            padding: 40px; border-radius: 15px; background: #000;
+            width: 90%; max-width: 400px;
+        }
+        .login-box input {
+            display: block; width: 100%; padding: 12px; margin: 10px 0;
+            border-radius: 5px; border: 1px solid var(--emas); background: #222; color: var(--putih);
+        }
+        .login-box button {
+            width: 100%; padding: 12px; background: var(--emas); color: black;
+            border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;
+        }
+        .login-box p { font-size: 14px; margin-top: 15px; cursor: pointer; text-decoration: underline; }
+
+        /* =========================================
+           2. HEADER & NAVIGASI
+           ========================================= */
+        header {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                              url('https://www.aman.com/sites/default/files/styles/hero_2_1_xl/public/2021-03/Amanjiwo_Hero_3.jpg');
+            background-size: cover; background-position: center;
+            height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--putih); text-align: center;
+        }
+        header h1 { font-size: 50px; color: var(--emas); text-transform: uppercase; letter-spacing: 5px; }
+
+        nav {
+            background: var(--gelap); padding: 15px; text-align: center;
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333;
+        }
+        nav a { color: var(--emas); margin: 0 15px; text-decoration: none; font-size: 16px; text-transform: uppercase; }
+        nav a:hover { color: var(--putih); }
+
+        /* =========================================
+           3. DAFTAR HARGA KAMAR (CARDS)
+           ========================================= */
+        .section { padding: 60px 20px; text-align: center; }
+        .kamar-container {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px;
+        }
+        .kamar-card {
+            background: var(--putih); border: 1px solid #eee; width: 300px;
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .kamar-card:hover { transform: translateY(-5px); }
+        .kamar-card img { width: 100%; height: 200px; object-fit: cover; }
+        .kamar-card-info { padding: 20px; }
+        .kamar-card-info h3 { color: #333; font-size: 20px; }
+        .kamar-card-info .harga { color: var(--emas); font-size: 18px; font-weight: bold; margin: 10px 0; }
+        .kamar-card-info button {
+            background: var(--gelap); color: var(--putih); border: none;
+            padding: 10px; width: 100%; cursor: pointer; border-radius: 5px;
+        }
+
+        /* =========================================
+           4. RESERVASI & MULTIMEDIA
+           ========================================= */
+        #reservasi { background-color: var(--gelap); color: var(--putih); }
+        .form-box {
+            max-width: 450px; margin: 30px auto; background: #222;
+            padding: 30px; border: 1px solid var(--emas); border-radius: 15px;
+        }
+        .form-box label { display: block; text-align: left; margin: 10px 0 5px; color: var(--emas); }
+        .form-box select, .form-box input {
+            width: 100%; padding: 12px; border-radius: 8px; border: none; margin-bottom: 15px;
+        }
+        .form-box button {
+            width: 100%; padding: 15px; background: var(--emas); color: black;
+            border: none; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px;
+        }
+
+        .video-container, .maps-container {
+            max-width: 800px; margin: 30px auto;
+            border: 2px solid var(--emas); border-radius: 10px; overflow: hidden;
+        }
+
+        /* =========================================
+           5. FOOTER (KONTAK & SOSMED)
+           ========================================= */
+        footer {
+            background: #111; color: var(--emas); padding: 40px; text-align: center;
+            border-top: 1px solid #333;
+        }
+        footer p { margin-bottom: 10px; font-size: 14px; }
+        .sosmed-icons { font-size: 24px; margin-top: 15px; }
+        .sosmed-icons a { color: var(--emas); margin: 0 10px; text-decoration: none; }
+        .sosmed-icons a:hover { color: var(--putih); }
+
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <h1>AMANJIWO</h1>
+            <div id="auth-title"><h3>Silakan Masuk</h3></div>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="auth-btn" onclick="tanganiAuth()">Masuk</button>
+            <p id="toggle-auth" onclick="gantiMode()">Belum punya akun? Daftar di sini</p>
+            <p id="error-msg" style="color: red; display: none; text-decoration: none;"></p>
+        </div>
+    </div>
+
+    <header>
+        <h1>Amanjiwo</h1>
+        <p>Temukan Ketenangan Jiwa di Jantung Jawa</p>
+    </header>
+
+    <nav>
+        <a href="#">Beranda</a>
+        <a href="#harga">Daftar Harga</a>
+        <a href="#reservasi">Reservasi</a>
+        <a href="#lokasi">Lokasi</a>
+    </nav>
+
+    <section id="harga" class="section">
+        <h2>Pilihan Akomodasi</h2>
+        <p>Kemewahan menginap dengan pemandangan Borobudur.</p>
+        <div class="kamar-container">
+            <div class="kamar-card">
+                <img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_GardenSuite_Exterior_1.jpg" alt="Garden Suite">
+                <div class="kamar-card-info">
+                    <h3>Garden Suite</h3>
+                    <p class="harga">Rp 12.500.000 / malam</p>
+                    <button onclick="lokasiReservasi()">Pesan Sekarang</button>
+                </div>
+            </div>
+            <div class="kamar-card">
+                <img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_BorobudurSuite_Exterior_1.jpg" alt="Borobudur Suite">
+                <div class="kamar-card-info">
+                    <h3>Borobudur Suite</h3>
+                    <p class="harga">Rp 15.800.000 / malam</p>
+                    <button onclick="lokasiReservasi()">Pesan Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reservasi" class="section">
+        <h2>Pemesanan Kamar</h2>
+        <div class="form-box">
+            <label>Pilih Suite:</label>
+            <select id="res-kamar">
+                <option>Garden Suite (Rp 12.500.000)</option>
+                <option>Borobudur Suite (Rp 15.800.000)</option>
+            </select>
+            <label>Tanggal Check-in:</label>
+            <input type="date" id="res-tanggal">
+            <label>Berapa Malam?</label>
+            <input type="number" id="res-durasi" min="1" value="1">
+            <button onclick="kirimWA()">HUBUNGI ADMIN VIA WHATSAPP</button>
+        </div>
+    </section>
+
+    <section id="lokasi" class="section">
+        <h2>Eksplorasi & Lokasi</h2>
+        
+        <div class="video-container">
+            <iframe width="100%" height="450" src="https://www.youtube.com/embed/S2C_Pndj2_A" title="Amanjiwo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="maps-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.152864197368!2d110.1770176758655!3d-7.591039975005886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a8c54536f9473%3A0x6b1509156096538c!2sAmanjiwo!5e0!3m2!1sid!2sid!4v1716388888888!5m2!1sid!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <footer>
+    <p>Hubungi Kami: <a href="mailto:safa.amanjiwo@gmail.com" style="color:var(--emas);">safa.amanjiwo@email.com</a></p>
+    <p>Ds. Majaksingi, Borobudur, Magelang, Jawa Tengah, Indonesia</p>
+    ...
+    <p style="font-size: 12px; color: #555; margin-top: 20px;">© 2026 Tugas Website Queena - Project Informatika. Data bersifat simulasi.</p>
+    </footer>
+
+    <script>
+        // --- A. LOGIN & DAFTAR (LocalStorage) ---
+        let isLoginMode = true;
+
+        function gantiMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerHTML = isLoginMode ? "<h3>Silakan Masuk</h3>" : "<h3>Buat Akun Baru</h3>";
+            document.getElementById('auth-btn').innerText = isLoginMode ? "Masuk" : "Daftar";
+            document.getElementById('toggle-auth').innerText = isLoginMode ? "Belum punya akun? Daftar di sini" : "Sudah punya akun? Masuk di sini";
+            document.getElementById('error-msg').style.display = "none";
+        }
+
+        function tanganiAuth() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const msg = document.getElementById('error-msg');
+
+            if (!user || !pass) {
+                msg.innerText = "Isi semua kolom!"; msg.style.display = "block"; return;
+            }
+
+            if (isLoginMode) {
+                // Login
+                const storedPass = localStorage.getItem(user);
+                if (storedPass && storedPass === pass) {
+                    document.getElementById('login-overlay').style.display = "none";
+                    alert("Selamat datang di Amanjiwo, " + user + "!");
+                } else {
+                    msg.innerText = "Username atau Password salah!"; msg.style.display = "block";
+                }
+            } else {
+                // Daftar
+                if (localStorage.getItem(user)) {
+                    msg.innerText = "Username sudah terdaftar!";
+                } else {
+                    localStorage.setItem(user, pass);
+                    alert("Akun berhasil dibuat! Silakan login."); gantiMode();
+                }
+                msg.style.display = "block";
+            }
+        }
+
+        // --- B. RESERVASI (WhatsApp) ---
+        function lokasiReservasi() { window.location.hash = "reservasi"; }
+
+        function kirimWA() {
+            const kamar = document.getElementById('res-kamar').value;
+            const tanggal = document.getElementById('res-tanggal').value;
+            const durasi = document.getElementById('res-durasi').value;
+
+            if (tanggal === "") { alert("Pilih tanggal dulu ya!"); return; }
+
+            const teksPesan = "Halo Admin Amanjiwo, saya ingin reservasi kamar:" +
+                              "\n- Jenis: " + kamar +
+                              "\n- Tanggal Check-in: " + tanggal +
+                              "\n- Durasi: " + durasi + " malam" +
+                              "\n\nApakah masih tersedia?";
+
+            // Ganti nomor di bawah dengan nomormu sendiri (awali dengan 62)
+            const nomorWA = "6282328427257"; 
+            const linkWhatsApp = "https://wa.me/" + nomorWA + "?text=" + encodeURIComponent(teksPesan);
+            window.open(linkWhatsApp, '_blank');
+        }
+    </script>
+</body>
+</html>
