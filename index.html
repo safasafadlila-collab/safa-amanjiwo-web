@@ -3,153 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amanjiwo by Safa</title>
+    <title>Amanjiwo | Safa Project</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
-        :root { --emas: #d4af37; --gelap: #111; --putih: #fff; }
-        body { background-color: var(--gelap); color: var(--putih); scroll-behavior: smooth; }
+        /* Reset & Base Style */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', sans-serif; }
+        :root { --gold: #c5a059; --bg: #0f0f0f; --text: #f5f5f5; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Background Utama */
-        .main-content {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+        /* Auth Overlay (Login/Register) */
+        #auth-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .auth-card {
+            width: 90%; max-width: 400px; padding: 40px; border: 1px solid #333; text-align: center;
+        }
+        .auth-card h1 { font-weight: 200; letter-spacing: 8px; margin-bottom: 30px; color: var(--gold); }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: transparent; border: 1px solid #444; color: #fff; outline: none; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-gold:hover { opacity: 0.8; }
+
+        /* Main Web Layout (Hidden initially) */
+        #main-web { display: none; }
+
+        /* Header / Hero ala Wix */
+        header {
+            height: 100vh; width: 100%; position: relative;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                         url('https://www.aman.com/sites/default/files/styles/hero_2_1_xl/public/2021-03/Amanjiwo_Hero_3.jpg');
-            background-size: cover; background-attachment: fixed; background-position: center;
-            min-height: 100vh; display: none; /* Sembunyi sebelum login */
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center; text-align: center;
         }
+        .hero-text h1 { font-size: clamp(40px, 8vw, 100px); font-weight: 100; letter-spacing: 20px; text-transform: uppercase; }
 
-        /* Overlay Login & Halaman Lain */
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; display: flex;
-            justify-content: center; align-items: center; flex-direction: column;
+        /* Navigation */
+        nav {
+            position: absolute; top: 0; width: 100%; padding: 30px;
+            display: flex; justify-content: center; gap: 40px; z-index: 100;
         }
-        .box-konten {
-            background: #1a1a1a; border: 1px solid var(--emas); padding: 30px;
-            border-radius: 15px; width: 90%; max-width: 450px; text-align: center;
+        nav a { color: #fff; text-decoration: none; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; }
+
+        /* Content Sections */
+        section { padding: 100px 10% ; }
+        .description-box { max-width: 800px; margin: 0 auto; text-align: center; line-height: 2; font-weight: 300; font-size: 18px; color: #aaa; }
+
+        /* Gallery ala Wix */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; margin-top: 50px;
         }
+        .gallery-item { grid-column: span 6; height: 400px; overflow: hidden; border: 1px solid #222; }
+        .gallery-item.large { grid-column: span 12; height: 600px; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
+        .gallery-item img:hover { transform: scale(1.05); }
 
-        /* Navigasi */
-        nav { background: rgba(0,0,0,0.9); padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--emas); }
-        nav a { color: var(--emas); margin: 0 15px; text-decoration: none; cursor: pointer; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        /* Pop-up Windows (Daftar Harga & Reservasi) */
+        .popup {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000;
+            display: none; align-items: center; justify-content: center;
+        }
+        .popup-content { width: 90%; max-width: 600px; position: relative; border: 1px solid var(--gold); padding: 50px; background: #0a0a0a; }
+        .close-popup { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: var(--gold); }
 
-        /* Section */
-        section { padding: 60px 20px; max-width: 900px; margin: auto; text-align: center; }
-        .deskripsi { line-height: 1.8; color: #ddd; font-style: italic; margin: 20px 0; font-size: 17px; }
+        /* Multimedia */
+        .video-box, .map-box { margin: 50px 0; border: 1px solid #333; }
 
-        /* Gallery */
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-        .gallery img { width: 100%; height: 250px; object-fit: cover; border: 1px solid var(--emas); }
-
-        /* Inputs & Buttons */
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
-        .btn-emas { background: var(--emas); color: #000; border: none; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .close-btn { color: var(--emas); cursor: pointer; float: right; font-size: 24px; }
+        /* Footer */
+        footer { padding: 80px 10%; border-top: 1px solid #222; text-align: center; }
+        .socials { margin: 30px 0; font-size: 20px; display: flex; justify-content: center; gap: 30px; }
+        .socials a { color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <div id="auth-page" class="overlay">
-        <div class="box-konten">
-            <h1 style="color:var(--emas); margin-bottom: 20px;">AMANJIWO</h1>
-            <div id="auth-form">
-                <h3 id="auth-title">Silakan Masuk</h3>
-                <input type="text" id="username" placeholder="Username">
-                <input type="password" id="password" placeholder="Password">
-                <button class="btn-emas" onclick="handleAuth()">MASUK</button>
-                <p style="margin-top:15px; font-size:13px; color:var(--emas); cursor:pointer;" onclick="toggleAuth()">Belum punya akun? Daftar di sini</p>
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h1>AMANJIWO</h1>
+            <h3 id="auth-mode-text" style="font-weight: 300; margin-bottom: 20px;">SILAKAN MASUK</h3>
+            <input type="text" id="username" placeholder="USERNAME">
+            <input type="password" id="password" placeholder="PASSWORD">
+            <button class="btn-gold" onclick="handleAuth()">MASUK</button>
+            <p onclick="toggleAuth()" style="margin-top:20px; font-size:12px; cursor:pointer; color:var(--gold); letter-spacing:2px;">BELUM PUNYA AKUN? DAFTAR</p>
+        </div>
+    </div>
+
+    <div id="price-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup('price-popup')">&times;</span>
+            <h2 style="font-weight: 200; letter-spacing: 5px; margin-bottom: 30px;">ACCOMMODATION</h2>
+            <div style="display:flex; justify-content:space-between; padding:20px 0; border-bottom:1px solid #222;">
+                <span>GARDEN SUITE</span><span>RP 12.500.000</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:20px 0; border-bottom:1px solid #222;">
+                <span>BOROBUDUR SUITE</span><span>RP 15.800.000</span>
             </div>
         </div>
     </div>
 
-    <div id="harga-page" class="overlay" style="display:none;">
-        <div class="box-konten">
-            <span class="close-btn" onclick="tutupPopUp('harga-page')">&times;</span>
-            <h2 style="color:var(--emas); margin-bottom:20px;">Daftar Harga</h2>
-            <div style="text-align:left; border-bottom:1px solid #333; padding:10px 0;">
-                <p>Garden Suite <span style="float:right; color:var(--emas);">Rp 12.500.000</span></p>
-            </div>
-            <div style="text-align:left; border-bottom:1px solid #333; padding:10px 0;">
-                <p>Borobudur Suite <span style="float:right; color:var(--emas);">Rp 15.800.000</span></p>
-            </div>
+    <div id="res-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup('res-popup')">&times;</span>
+            <h2 style="font-weight: 200; letter-spacing: 5px; margin-bottom: 30px;">RESERVATION</h2>
+            <input type="date" id="res-date">
+            <button class="btn-gold" onclick="sendWA()">KIRIM VIA WHATSAPP</button>
         </div>
     </div>
 
-    <div id="res-page" class="overlay" style="display:none;">
-        <div class="box-konten">
-            <span class="close-btn" onclick="tutupPopUp('res-page')">&times;</span>
-            <h2 style="color:var(--emas); margin-bottom:20px;">Reservasi</h2>
-            <select id="pilih-kamar">
-                <option>Garden Suite</option>
-                <option>Borobudur Suite</option>
-            </select>
-            <input type="date" id="tgl-booking">
-            <button class="btn-emas" onclick="keWA()">Kirim via WhatsApp</button>
-        </div>
-    </div>
+    <div id="main-web">
+        <header>
+            <nav>
+                <a onclick="openPopup('price-popup')">Daftar Harga</a>
+                <a onclick="openPopup('res-popup')">Reservasi</a>
+                <a href="#about">Tentang Kami</a>
+                <a href="#lokasi">Lokasi & Video</a>
+            </nav>
+            <div class="hero-text">
+                <h1>Amanjiwo</h1>
+                <p style="letter-spacing: 10px; font-weight: 200;">PEACEFUL SOUL</p>
+            </div>
+        </header>
 
-    <div id="main-web" class="main-content">
-        <nav>
-            <a onclick="bukaPopUp('harga-page')">Daftar Harga</a>
-            <a onclick="bukaPopUp('res-page')">Reservasi</a>
-            <a href="#lokasi">Lokasi & Video</a>
-        </nav>
+        <section id="about">
+            <div class="description-box">
+               Diberi nama Amanjiwo — yang berarti 'Jiwa yang Damai' — karena lokasinya yang tenang di jantung Jawa Tengah, resor ini menghadap langsung ke Candi Borobudur, situs Warisan Dunia UNESCO sekaligus kompleks candi terbesar di dunia. Situs ini kini telah dibuka sepenuhnya tetapi masih belum begitu ramai, inilah saat yang tepat untuk merasakan kedamaian Borobudur yang sesungguhnya, dengan akses istimewa dari resor. Lokasinya ideal untuk menjelajahi kekayaan sejarah dan alam sekitar, atau hanya untuk bersantai dalam ketenangan, Amanjiwo terbentang dari rotunda megah di puncak bukit hingga ke kolam yang indah, menghadirkan harmoni antara petualangan budaya dan kedamaian jiwa.  
+            </div>
 
-        <section>
-            <h1 style="font-size: 40px; letter-spacing: 4px; margin-bottom: 10px;">AMANJIWO</h1>
-            <p class="deskripsi">
-                Diberi nama Amanjiwo — yang berarti 'Jiwa yang Damai' — karena lokasinya yang tenang di jantung Jawa Tengah, resor ini menghadap langsung ke Candi Borobudur, situs Warisan Dunia UNESCO sekaligus kompleks candi terbesar di dunia. Situs ini kini telah dibuka sepenuhnya tetapi masih belum begitu ramai, inilah saat yang tepat untuk merasakan kedamaian Borobudur yang sesungguhnya, dengan akses istimewa dari resor. 
- 
-Lokasinya ideal untuk menjelajahi kekayaan sejarah dan alam sekitar, atau hanya untuk bersantai dalam ketenangan, Amanjiwo terbentang dari rotunda megah di puncak bukit hingga ke kolam yang indah, menghadirkan harmoni antara petualangan budaya dan kedamaian jiwa.
-            </p>
-            
-            <h3 style="margin-top: 40px; color: var(--emas);">Galeri Foto</h3>
-            <div class="gallery">
-                <img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_GardenSuite_Exterior_1.jpg">
-                <img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_BorobudurSuite_Exterior_1.jpg">
-                <img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_MainPool_1.jpg">
+            <div class="gallery-grid">
+                <div class="gallery-item large"><img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_MainPool_1.jpg"></div>
+                <div class="gallery-item"><img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_GardenSuite_Exterior_1.jpg"></div>
+                <div class="gallery-item"><img src="https://www.aman.com/sites/default/files/styles/card_1_1_xl/public/2021-03/Amanjiwo_BorobudurSuite_Exterior_1.jpg"></div>
             </div>
         </section>
 
         <section id="lokasi">
-            <h2 style="color:var(--emas); margin-bottom:20px;">Video Eksplorasi</h2>
-            <iframe width="100%" height="350" src="https://www.youtube.com/embed/EZNzoeCN_6o" frameborder="0" allowfullscreen></iframe>
-            
-            <h2 style="color:var(--emas); margin: 40px 0 20px;">Lokasi Kami</h2>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.152865963283!2d110.1983054!3d-7.591012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a8c88f98f6d71%3A0x9597c5e0037e246!2sAmanjiwo!5e0!3m2!1sen!2sid!4v1713700000000" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <h2 style="text-align:center; font-weight:100; letter-spacing:10px; margin-bottom:40px;">THE EXPERIENCE</h2>
+            <div class="video-box">
+                <iframe width="100%" height="500" src="https://www.youtube.com/embed/EZNzoeCN_6o" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="map-box">
+                <iframe src="https://maps.app.goo.gl/ASL3oLKgfcjogdG6A" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
         </section>
 
-        <footer style="padding: 40px; border-top: 1px solid var(--emas); margin-top: 50px;">
-            <p>Email: safa.amanjiwo@email.com</p>
-            <div style="margin: 15px 0;">
-                <i class="fab fa-instagram" style="margin: 0 10px; font-size: 24px; color: var(--emas);"></i>
-                <i class="fab fa-facebook" style="margin: 0 10px; font-size: 24px; color: var(--emas);"></i>
+        <footer>
+            <h2 style="font-weight:200; letter-spacing:5px;">SAFA x AMANJIWO</h2>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
             </div>
-            <p style="font-size: 11px; color: #666;">&copy; 2026 Tugas Informatika Safa. All rights reserved.</p>
+            <p style="font-size:12px; color:#555;">Email: safa.amanjiwo@email.com | Magelang, Jawa Tengah, Indonesia</p>
         </footer>
     </div>
 
     <script>
         let isLogin = true;
-
         function toggleAuth() {
             isLogin = !isLogin;
-            document.getElementById('auth-title').innerText = isLogin ? "Silakan Masuk" : "Daftar Akun Baru";
-            document.querySelector('.btn-emas').innerText = isLogin ? "MASUK" : "DAFTAR";
-            document.querySelector('p[onclick="toggleAuth()"]').innerText = isLogin ? "Belum punya akun? Daftar di sini" : "Sudah punya akun? Masuk di sini";
+            document.getElementById('auth-mode-text').innerText = isLogin ? "SILAKAN MASUK" : "DAFTAR AKUN BARU";
+            document.querySelector('.btn-gold').innerText = isLogin ? "MASUK" : "DAFTAR";
         }
 
         function handleAuth() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
-            if(!u || !p) return alert("Isi username & password!");
+            if(!u || !p) { alert("Data tidak lengkap!"); return; }
 
             if(isLogin) {
                 const sp = localStorage.getItem(u);
                 if(sp === p) {
-                    document.getElementById('auth-page').style.display = 'none';
+                    document.getElementById('auth-overlay').style.display = 'none';
                     document.getElementById('main-web').style.display = 'block';
-                } else { alert("Akun tidak ditemukan atau password salah!"); }
+                } else { alert("User tidak ditemukan atau password salah!"); }
             } else {
                 localStorage.setItem(u, p);
                 alert("Berhasil Daftar! Silakan Login.");
@@ -157,12 +181,11 @@ Lokasinya ideal untuk menjelajahi kekayaan sejarah dan alam sekitar, atau hanya 
             }
         }
 
-        function bukaPopUp(id) { document.getElementById(id).style.display = 'flex'; }
-        function tutupPopUp(id) { document.getElementById(id).style.display = 'none'; }
-        function keWA() {
-            const k = document.getElementById('pilih-kamar').value;
-            const t = document.getElementById('tgl-booking').value;
-            window.open(`https://wa.me/628123456789?text=Halo Amanjiwo, saya ingin reservasi ${k} untuk tanggal ${t}`, '_blank');
+        function openPopup(id) { document.getElementById(id).style.display = 'flex'; }
+        function closePopup(id) { document.getElementById(id).style.display = 'none'; }
+        function sendWA() {
+            const t = document.getElementById('res-date').value;
+            window.open(`https://wa.me/6282328427257?text=Halo Amanjiwo, saya ingin reservasi untuk tanggal ${t}`, '_blank');
         }
     </script>
 </body>
